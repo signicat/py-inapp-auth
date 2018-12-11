@@ -7,6 +7,8 @@ These are **functional examples** of inapp authentication. It does not illustrat
 
 This example follows the documentation at [Swedish BankID: How to integrate authentication with Swedish BankID from a native app](https://developer.signicat.com/id-methods/swedish-bankid/#how-to-integrate-authentication-with-swedish-bankid-from-a-native-app).
 
+PS: Documentation for the Norwegian implementation will be made available as soon as it's ready.
+
 **Dependencies**:
 
 * Python 3
