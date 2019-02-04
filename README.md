@@ -48,6 +48,13 @@ You need to change the variable ```cfg['NID']``` to a valid Swedish BankID test-
 
 Once you have changed this variable, you can run it with ```python3 sbid-inapp.py```.
 
+**Security Concerns**
+
+There are certain key concepts to keep in mind to be able to achive a good level of security when implementing OIDC authentication in-app.
+* [Proof Key for Code Exchange](https://tools.ietf.org/html/rfc7636): Signicat feels that a code interception attack is more likely with an in-app flow. As such it is **strongly recommended** that you implement this extension for OAuth/OIDC (supported by default on Signicat's OIDC clients).
+* Unless you have specifically hardened security of your mobile application, you have to consider it somewhat unsafe. *OIDC tokens and client secrets provided by Signicat should not be stored in your app.*
+* As mentioned earlier step 4 & 5 **should not** be performed in-app. 
+* General hardening of mobile applications should also be considered. See for instance AppSamurai blog post: [12 Various Ways To Ensure Mobile Application Security](https://appsamurai.com/12-various-ways-to-ensure-mobile-application-security/)
 
 ### References
 

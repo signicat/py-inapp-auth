@@ -3,6 +3,7 @@ import requests
 import random
 from time import sleep
 import urllib.parse as urlparse
+from pkce import code_verifier, code_challenge
 
 """ Needs to be a Swedish BankID test-user setup with the mobile app!
     See https://developer.signicat.com/id-methods/swedish-bankid/#test-information
@@ -13,10 +14,15 @@ if str.isdigit(cfg['NID']) is False or len(cfg['NID']) is not 12:
     print("Please change the variable cfg['NID'] to a valid Swedish BankID test-user!")
     sys.exit()
 
+# STEP 0: Prepare PKCE (https://tools.ietf.org/html/rfc7636)
+verifier = code_verifier(40)
+challenge = code_challenge(verifier)
+print("PKCE: verifier='{}', challenge='{}'".format(verifier, challenge))
+
 # STEP 1: Call authorize using method "sbid-inapp"
 headers1 = {'Accept': 'application/json'}
-url1 = ('https://preprod.signicat.com/oidc/authorize?response_type=code&scope=openid+profile&client_id=demo-inapp&redirect_uri=https://example.com/redirect&acr_values=urn:signicat:oidc:method:sbid-inapp&state={}&login_hint=subject-{}'
-    .format(''.join(random.choice('ABCDEF0123456789') for _ in range(8)), cfg['NID']))
+url1 = ('https://preprod.signicat.com/oidc/authorize?response_type=code&scope=openid+profile&client_id=demo-inapp&redirect_uri=https://example.com/redirect&acr_values=urn:signicat:oidc:method:sbid-inapp&state={}&login_hint=subject-{}&code_challenge_method=S256&code_challenge={}'
+        .format(''.join(random.choice('ABCDEF0123456789') for _ in range(8)), cfg['NID'], challenge.decode()))
 r1 = requests.get(url1, headers=headers1)
 jar = r1.cookies # !IMPORTANT! Saves all cookies - to be used in future requests.
 res1 = r1.json()
@@ -48,6 +54,7 @@ payload = {
     'client_id': 'demo-inapp',
     'redirect_uri': 'https://example.com/redirect',
     'grant_type': 'authorization_code',
+    'code_verifier': verifier.decode(),
     'code': res3_params['code'][0]
 }
 res4 = requests.post('https://preprod.signicat.com/oidc/token', data=payload, headers=headers2).json()
