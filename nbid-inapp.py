@@ -26,8 +26,8 @@ print("PKCE: verifier='{}', challenge='{}'".format(verifier, challenge))
 
 # STEP 1: Call authorize using method "nbid-inapp"
 headers1 = {'Accept': 'application/json'}
-url1 = ('https://preprod.signicat.com/oidc/authorize?response_type=code&scope=openid+profile&client_id=demo-inapp&redirect_uri=https://example.com/redirect&acr_values=urn:signicat:oidc:method:nbid-inapp&state={}&login_hint=birthdate-{}&login_hint=phone-{}'
-    .format(''.join(random.choice('ABCDEF0123456789') for _ in range(8)), cfg['BD'], cfg['PN'], challenge.decode())))
+url1 = ('https://preprod.signicat.com/oidc/authorize?response_type=code&scope=openid+profile&client_id=demo-inapp&redirect_uri=https://example.com/redirect&acr_values=urn:signicat:oidc:method:nbid-inapp&state={}&login_hint=birthdate-{}&login_hint=phone-{}&code_challenge_method=S256&code_challenge={}'
+        .format(''.join(random.choice('ABCDEF0123456789') for _ in range(8)), cfg['BD'], cfg['PN'], challenge.decode()))
 r1 = requests.get(url1, headers=headers1)
 jar = r1.cookies # !IMPORTANT! Saves all cookies - to be used in future requests.
 res1 = r1.json()

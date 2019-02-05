@@ -9,7 +9,7 @@ from pkce import code_verifier, code_challenge
     See https://developer.signicat.com/id-methods/swedish-bankid/#test-information
     Format: yyyymmddnnnn
 """
-cfg = {'NID': ''}
+cfg = {'NID': '198304062717'}
 if str.isdigit(cfg['NID']) is False or len(cfg['NID']) is not 12:
     print("Please change the variable cfg['NID'] to a valid Swedish BankID test-user!")
     sys.exit()
